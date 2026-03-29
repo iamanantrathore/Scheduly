@@ -64,10 +64,12 @@ async function sendMeetingEmail({ to, subject, text }) {
   try {
     const from = process.env.SMTP_FROM;
     const mailer = getTransporter();
+    console.log('Sending email to:', to, 'from:', from);
     await mailer.sendMail({ from, to, subject, text });
+    console.log('Email sent successfully to:', to);
     return true;
   } catch (err) {
-    console.error('Failed to send email:', err.message);
+    console.error('Failed to send email to', to, ':', err.message);
     return false;
   }
 }
