@@ -21,6 +21,7 @@ function getTransporter() {
     host: SMTP_HOST,
     port,
     secure,
+    family: 4,  // Force IPv4 (fixes Railway + Gmail ENETUNREACH error)
   };
 
   if (SMTP_USER && SMTP_PASS) {
