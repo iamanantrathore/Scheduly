@@ -101,7 +101,8 @@ Scheduly`;
   });
 
   if (!emailSent) {
-    throw new Error('Failed to send confirmation email');
+    console.error('Failed to send confirmation email to', meeting.invitee_email);
+    // Don't throw - allow booking to succeed even if email fails
   }
 }
 
