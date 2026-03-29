@@ -5,6 +5,9 @@ const cors = require('cors');
 const app = express();
 const PORT = Number(process.env.PORT || 3002);
 
+// Trust Railway proxy for rate limiting and client IP detection
+app.set('trust proxy', 1);
+
 app.use(cors());
 app.use(express.json());
 
