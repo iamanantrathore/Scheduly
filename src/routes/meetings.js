@@ -147,7 +147,10 @@ router.put('/:id', mutationLimiter, async (req, res) => {
       [req.params.id]
     );
 
-    await sendMeetingUpdatedEmail(updatedMeeting, meeting.start_time, meeting.end_time);
+    // Send email in background without blocking response
+    sendMeetingUpdatedEmail(updatedMeeting, meeting.start_time, meeting.end_time).catch(err => {
+      console.error('Background email send failed:', err.message);
+    });
     res.json(updatedMeeting);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -166,7 +169,11 @@ router.delete('/:id', mutationLimiter, async (req, res) => {
     if (!meeting) return res.status(404).json({ error: 'Meeting not found' });
 
     await db.run("UPDATE bookings SET status = 'cancelled' WHERE id = ?", [req.params.id]);
-    await sendMeetingCancelledEmail(meeting);
+    
+    // Send email in background without blocking response
+    sendMeetingCancelledEmail(meeting).catch(err => {
+      console.error('Background email send failed:', err.message);
+    });
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });

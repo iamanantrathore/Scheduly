@@ -141,7 +141,10 @@ router.post('/:slug', mutationLimiter, async (req, res) => {
       [id]
     );
 
-    await sendBookingConfirmationEmail(booking);
+    // Send email in background without blocking response
+    sendBookingConfirmationEmail(booking).catch(err => {
+      console.error('Background email send failed:', err.message);
+    });
 
     res.status(201).json(booking);
   } catch (err) {
