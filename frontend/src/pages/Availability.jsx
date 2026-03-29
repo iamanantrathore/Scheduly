@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { Save, Clock } from 'lucide-react';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -29,7 +29,7 @@ export default function Availability() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get('/api/availability')
+    api.get('/availability')
       .then((res) => {
         if (res.data.length === 0) {
           // Initialize with defaults
@@ -60,7 +60,7 @@ export default function Availability() {
     setSaving(true);
     setError('');
     try {
-      await axios.put('/api/availability', { availability, timezone });
+      await api.put('/availability', { availability, timezone });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch {
