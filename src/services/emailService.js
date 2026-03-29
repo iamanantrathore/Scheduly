@@ -94,11 +94,15 @@ Notes: ${meeting.notes || 'N/A'}
 Thanks,
 Scheduly`;
 
-  await sendMeetingEmail({
+  const emailSent = await sendMeetingEmail({
     to: meeting.invitee_email,
     subject,
     text: body,
   });
+
+  if (!emailSent) {
+    throw new Error('Failed to send confirmation email');
+  }
 }
 
 async function sendMeetingUpdatedEmail(meeting, previousStart, previousEnd) {
@@ -182,4 +186,5 @@ module.exports = {
   sendMeetingUpdatedEmail,
   sendMeetingCancelledEmail,
   sendMeetingReminderEmail,
+  sendMeetingEmail,  // Added for testing
 };
